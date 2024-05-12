@@ -1,30 +1,35 @@
 #include <iostream>
+#include <limits>
+
 using namespace std;
 
-//will promt user to enter a value
-//and will deem is value is within bounds
-int validInput()
-{
-    int userInput;
 
-    cout << "Enter valid integer: ";
-    cin >> userInput;
+int prompt(int lowBound, int upBound, string promt, string error) {
+    int value;
+    bool validInput = false;
 
-    //lower bound is 1
-    //promts user to enter valid value
-    while(userInput < 1)
-    {
-        cout << "\nInput is invalid\nEnter valid integer: ";
-        cin >> userInput;
+    // Repeat until valid input is received
+    do {
+        cout << prompt << endl;
+        cin >> value;
 
-    }
-    
-   cout << "\nThe value chosen by user is: " << userInput;
+        // Check if input is valid
+        if (cin.fail() || value < lowBound || value > upBound) {
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); /
+            cout << error << endl;
+        } else {
+            validInput = true;
+        }
+    } while (!validInput);
 
-   return 1;
+    return value;
 }
 
-int main () {
-
- validInput();
+int main() {
+    
+    int value = prompt(0, 100, "Please enter a value", "Your value is invalid");
+    cout << "The value chosen by the user is " << value << endl;
+    
+    return 0;
 }
